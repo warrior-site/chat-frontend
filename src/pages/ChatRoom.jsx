@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSocket } from '../context/SocketContext';
-import Navbar from './Navbar';
-import MessageList from './MessageList';
-import MessageInput from './MessageInput';
-import UserBadge from './UserBadge';
-import LoadingSpinner from './LoadingSpinner';
+import Navbar from '../components/Navbar';
+import MessageList from '../components/MessageList';
+import MessageInput from '../components/MessageInput';
+import UserBadge from '../components/UserBadge';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { useUser } from '../context/UserContext'
 import '../index.css'
 // import { motion } from 'framer-motion'; // Uncomment if you want to use animations
