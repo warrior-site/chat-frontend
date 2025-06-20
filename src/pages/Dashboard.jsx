@@ -1,48 +1,70 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useUser } from '../context/UserContext';
 import { useAuthStore } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user } = useAuthStore();
-  const [profilePic, setProfilePic] = useState(user?.profilePicture);
-  const [language, setLanguage] = useState('');
-  const [purpose, setPurpose] = useState('');
-  const [game, setGame] = useState('');
-  const { isLoading, logout } = useAuthStore();
+  const { user, isLoading, logout } = useAuthStore();
+  const [profilePic, setProfilePic] = useState(user?.profilePicture || '');
+  const [file, setFile] = useState(null);
+  const [language, setLanguage] = useState(user?.preferredLanguage || '');
+  const [purpose, setPurpose] = useState(user?.usageReason || '');
+  const [game, setGame] = useState(user?.game || '');
+  const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       await logout();
-      navigate("/login"); // Redirect to home after logout
+      navigate("/login");
     } catch (error) {
       console.error('Logout error:', error);
       alert('Logout failed. Please try again.');
     }
-  }
-
-
-
+  };
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfilePic(reader.result);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedFile);
     }
   };
-  console.log(user);
-  const handleSave = () => {
-    console.log({
-      language,
-      purpose,
-      game: purpose === 'Gaming' ? game : null,
-    });
-    // TODO: Send preferences to backend
+
+  const handleSave = async () => {
+    if (!user?.email) return alert("User email missing");
+
+    const formData = new FormData();
+    formData.append("email", user.email);
+    formData.append("language", language);
+    formData.append("usageReason", purpose);
+    if (purpose === 'Gaming') formData.append("game", game);
+    if (file) formData.append("file", file);
+
+    setIsSaving(true);
+    try {
+      const res = await fetch("https://chat-backend-knw6.onrender.com/api/user/profile", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ Profile updated successfully!");
+        console.log("Response:", data);
+      } else {
+        throw new Error(data.message || "Update failed");
+      }
+    } catch (err) {
+      console.error("Save error:", err);
+      alert("Something went wrong!");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const fadeInVariants = {
@@ -78,113 +100,99 @@ const Dashboard = () => {
         </div>
 
         <div className="mt-8 space-y-4">
-          <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
-            <strong>👤 Username:</strong> {user?.username}
-          </motion.div>
-
-          <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
-            <strong>📧 Gmail:</strong> {user?.email}
-          </motion.div>
-
-          <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
-            <strong>✅ Status:</strong>{' '}
-            {user?.isVerified ? (
+          <InfoBox label="👤 Username" value={user?.username} />
+          <InfoBox label="📧 Gmail" value={user?.email} />
+          <InfoBox
+            label="✅ Status"
+            value={user?.isVerified ? (
               <span className="text-green-400">Verified</span>
             ) : (
               <span className="text-red-400">Unverified</span>
             )}
-          </motion.div>
+          />
+          <InfoBox
+            label="📆 Member Since"
+            value={new Date(user?.createdAt).toLocaleDateString()}
+          />
 
-          <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
-            <strong>📆 Member Since:</strong>{' '}
-            {new Date(user?.createdAt).toLocaleDateString()}
-          </motion.div>
+          {/* Language */}
+          <SelectBox label="🌐 Preferred Language" value={language} onChange={setLanguage} options={["English", "Hindi", "Spanish", "Tamil"]} />
 
-          {/* LANGUAGE SELECT */}
-          <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
-            <label className="block text-sm mb-2 font-semibold">🌐 Preferred Language:</label>
-            <select
-              className="w-full p-2 rounded bg-[#2b2c3b] text-white"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-            >
-              <option value="">Select Language</option>
-              <option value="English">English</option>
-              <option value="Hindi">Hindi</option>
-              <option value="Spanish">Spanish</option>
-              <option value="Tamil">Tamil</option>
-            </select>
-          </motion.div>
+          {/* Purpose */}
+          <SelectBox label="🎯 Purpose" value={purpose} onChange={setPurpose} options={["Normal Use", "Gaming"]} />
 
-          {/* PURPOSE SELECT */}
-          <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
-            <label className="block text-sm mb-2 font-semibold">🎯 Purpose:</label>
-            <select
-              className="w-full p-2 rounded bg-[#2b2c3b] text-white"
-              value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}
-            >
-              <option value="">Select Purpose</option>
-              <option value="Normal Use">Normal Use</option>
-              <option value="Gaming">Gaming</option>
-            </select>
-          </motion.div>
-
-          {/* GAME SELECT (conditional) */}
+          {/* Game (Conditional) */}
           {purpose === 'Gaming' && (
-            <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
-              <label className="block text-sm mb-2 font-semibold">🎮 Choose Game:</label>
-              <select
-                className="w-full p-2 rounded bg-[#2b2c3b] text-white"
-                value={game}
-                onChange={(e) => setGame(e.target.value)}
-              >
-                <option value="">Select Game</option>
-                <option value="BGMI">BGMI</option>
-                <option value="Free Fire">Free Fire</option>
-                <option value="Clash Royale">Clash Royale</option>
-                <option value="Clash of Clans">Clash of Clans</option>
-              </select>
-            </motion.div>
+            <SelectBox label="🎮 Choose Game" value={game} onChange={setGame} options={["BGMI", "Free Fire", "Clash Royale", "Clash of Clans"]} />
           )}
         </div>
 
         <div className="flex justify-center mt-6">
           <button
             onClick={handleSave}
-            className="w-1/2  py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
+            disabled={isSaving}
+            className="w-1/2 py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
                      before:absolute before:inset-0 before:rounded-md before:shadow-[0_0_20px_2px_white] before:opacity-0 hover:before:opacity-100 before:transition-opacity"
           >
-            💾 Save Preferences
+            {isSaving ? (
+              <span className="flex justify-center items-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+                Saving...
+              </span>
+            ) : (
+              "💾 Save Preferences"
+            )}
           </button>
         </div>
 
         <div className="flex justify-center mt-4">
           <button
             onClick={() => navigate('/')}
-            className="w-1/2  py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
+            className="w-1/2 py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
                      before:absolute before:inset-0 before:rounded-md before:shadow-[0_0_20px_2px_white] before:opacity-0 hover:before:opacity-100 before:transition-opacity"
           >
             🏠 Go to Home Page
           </button>
         </div>
+
         <div className="flex justify-center mt-4">
-
-
           <button
             onClick={handleLogout}
             disabled={isLoading}
-            className="w-1/2  py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
+            className="w-1/2 py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
                      before:absolute before:inset-0 before:rounded-md before:shadow-[0_0_20px_2px_white] before:opacity-0 hover:before:opacity-100 before:transition-opacity"
           >
-            {isLoading ? 'loging out...' : 'logout'}
+            {isLoading ? 'Logging out...' : 'Logout'}
           </button>
         </div>
-
       </motion.div>
-
     </div>
   );
 };
+
+const InfoBox = ({ label, value }) => (
+  <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
+    <strong>{label}:</strong> {value}
+  </motion.div>
+);
+
+const SelectBox = ({ label, value, onChange, options }) => (
+  <motion.div className="bg-[#1f1f2e] rounded-lg px-6 py-4 shadow-md">
+    <label className="block text-sm mb-2 font-semibold">{label}</label>
+    <select
+      className="w-full p-2 rounded bg-[#2b2c3b] text-white"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    >
+      <option value="">Select</option>
+      {options.map(opt => (
+        <option key={opt} value={opt}>{opt}</option>
+      ))}
+    </select>
+  </motion.div>
+);
 
 export default Dashboard;
