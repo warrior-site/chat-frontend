@@ -11,7 +11,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // ⛔ Avoid https in development
-    const SOCKET_URL =" https://chat-backend-knw6.onrender.com"
+    const SOCKET_URL ="https://chat-backend-knw6.onrender.com"
 
     const newSocket = io(SOCKET_URL, {
       transports: ['websocket'],
