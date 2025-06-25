@@ -5,3 +5,19 @@ body::-webkit-scrollbar {
 .chat-mid::-webkit-scrollbar {
   display: none;
 }
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 10s ease infinite;
+}
+.chat-scroll::-webkit-scrollbar {
+  display: none;
+}

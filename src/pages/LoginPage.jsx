@@ -19,12 +19,14 @@ const LoginPage = () => {
       await login(userId, password);
       if (!isLoading) {
         navigate('/dashboard');
+        toast.success('✅ Login Done!');
       } else {
         alert('Logging in, please wait...');
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert('Login failed. Please try again.');
+      toast.error('❌ Login Failed .');
+      
       return;
       
     }

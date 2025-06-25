@@ -12,6 +12,8 @@ const Dashboard = () => {
   const [game, setGame] = useState(user?.game || '');
   const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
+  const font = user?.font || '';
+   const textSize = user?.textSize || '';
 
   const handleLogout = async () => {
     try {
@@ -47,6 +49,7 @@ const Dashboard = () => {
 
     setIsSaving(true);
     try {
+      //https://chat-backend-knw6.onrender.com
       const res = await fetch("https://chat-backend-knw6.onrender.com/api/user/profile", {
         method: "POST",
         body: formData,
@@ -54,6 +57,7 @@ const Dashboard = () => {
 
       const data = await res.json();
       if (res.ok) {
+        toast.success('✅ Preferences saved!');
         alert("✅ Profile updated successfully!");
         console.log("Response:", data);
       } else {
@@ -61,7 +65,8 @@ const Dashboard = () => {
       }
     } catch (err) {
       console.error("Save error:", err);
-      alert("Something went wrong!");
+      toast.error('❌ Failed to save preferences.');
+      
     } finally {
       setIsSaving(false);
     }
@@ -73,7 +78,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1e1e2f] via-[#2c2c54] to-[#0f0f1c] text-white px-4">
+    <div className={`min-h-screen flex  ${font} ${textSize} items-center justify-center bg-gradient-to-br from-[#1e1e2f] via-[#2c2c54] to-[#0f0f1c] text-white px-4`}>
       <motion.div
         className="w-full max-w-3xl bg-gradient-to-tr from-[#282a36] to-[#1e1e2f] p-8 rounded-xl shadow-2xl"
         initial="hidden"
@@ -145,6 +150,15 @@ const Dashboard = () => {
             ) : (
               "💾 Save Preferences"
             )}
+          </button>
+        </div>
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => navigate('/Personalization')}
+            className="w-1/2 py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
+                     before:absolute before:inset-0 before:rounded-md before:shadow-[0_0_20px_2px_white] before:opacity-0 hover:before:opacity-100 before:transition-opacity"
+          >
+            Personalization
           </button>
         </div>
 

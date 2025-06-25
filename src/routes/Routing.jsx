@@ -7,6 +7,7 @@ import LoginPage from '../pages/LoginPage';
 import Dashboard from '../pages/Dashboard';
 import VerifyEmail from '../pages/VerifyEmail';
 import { useAuthStore } from '../context/authContext';
+import Personalization from '../pages/Personalization';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
@@ -44,13 +45,14 @@ function Routing() {
         }
       />
       <Route
-        path="/chat"
+        path="/chat/:chatType/:targetId"
         element={
           <ProtectedRoute>
             <ChatRoom />
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/dashboard"
         element={
@@ -76,6 +78,12 @@ function Routing() {
         }
       />
       <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/personalization" element={
+        <ProtectedRoute>
+          <Personalization />
+        </ProtectedRoute>
+
+      } />
     </Routes>
   );
 }

@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 
 const LoadingSpinner = () => {
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 to-black">
+    //bg-gradient-to-br from-gray-900 to-black
+    <div className="flex justify-center items-center h-screen bg-black/30 backdrop-blur-lg">
       <motion.div
         className="w-16 h-16 border-4 border-t-transparent border-white rounded-full"
         animate={{ rotate: 360 }}

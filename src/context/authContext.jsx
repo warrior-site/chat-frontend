@@ -3,6 +3,7 @@ import axios from 'axios';
 
 
 const API_URL = "https://chat-backend-knw6.onrender.com/api/auth"
+// const API_URL = "http://localhost:5000/api/auth"; // Use this for local development
 axios.defaults.withCredentials = true; // Enable sending cookies with requests
 export const useAuthStore = create((set) => ({
     user: null,
