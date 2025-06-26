@@ -22,7 +22,7 @@ function SearcUserGroup() {
 
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5000/api/user/search?type=${type}&q=${q}`, {
+      const res = await axios.get(`https://chat-backend-knw6.onrender.com/api/user/search?type=${type}&q=${q}`, {
         withCredentials: true,
       });
 
