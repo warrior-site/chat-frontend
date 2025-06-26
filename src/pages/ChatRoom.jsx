@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
 import UserBadge from '../components/UserBadge';
-import AIChat from '../components/AiChat';
+import AIChat from '../components/AIChat';
 import '../index.css';
 import { useAuthStore } from '../context/authContext';
 import { useParams } from 'react-router-dom';
