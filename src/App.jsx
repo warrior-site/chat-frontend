@@ -19,7 +19,7 @@ const{ user, isAuthenticated, isCheckingAuth, checkAuth } = useAuthStore();
 
   useEffect(() => {
     checkAuth()
-  }, [checkAuth])
+  }, [])
 
   if (isCheckingAuth) return <LoadingSpinner />;
   console.log("User:", user);
