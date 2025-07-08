@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
-
+import { ToastContainer } from "react-toastify";
 import { Link,useNavigate  } from 'react-router-dom';
 import { useAuthStore } from '../context/authContext';
 
