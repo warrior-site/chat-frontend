@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../context/authContext';
-
+import { ToastContainer } from "react-toastify";
 function SignUp() {
 
 
