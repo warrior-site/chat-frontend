@@ -36,7 +36,7 @@ function Personalization() {
         formData.append('file', backgroundImage);
       }
 
-      const res = await axios.post('http://localhost:5000/api/user/preferences', formData, {
+      const res = await axios.post('https://chat-backend-knw6.onrender.com/api/user/preferences', formData, {
         withCredentials: true,
       });
 
@@ -44,7 +44,7 @@ function Personalization() {
       console.log("Response:", res.data);
       toast.success('✅ Preferences saved!');
     } catch (err) {
-      toast.error('❌ Failed to save preferences.');
+      toast.error('❌ Failed to save preferences.Try by selecting all fields');
       console.error(err);
     } finally {
       setLoading(false);
@@ -139,6 +139,7 @@ function Personalization() {
           accept="image/*"
           onChange={handleImageUpload}
           className="text-sm"
+          style={{ backgroundColor: '#2b2c3b', borderRadius: '0.375rem', padding: '0.5rem', textAlign: "center" }}
         />
         {backgroundImage && typeof backgroundImage !== 'string' && (
           <img

@@ -17,7 +17,7 @@ function MessageList({ messages }) {
       userId: user._id,
     });
     setPickerIndex(null);
-  };
+  }; 
 
   return (
     <div className="space-y-4 py-6">
@@ -37,7 +37,7 @@ function MessageList({ messages }) {
             key={msg._id}
             className="relative group max-w-xl bg-gray-800 text-white p-3 rounded-xl shadow-md"
           >
-            <p className="text-sm font-semibold mb-1">{msg.sender}</p>
+            <p className="text-sm font-semibold mb-1">{msg.userName}</p>
             <p>{msg.text}</p>
 
             {/* Reactions with counts */}

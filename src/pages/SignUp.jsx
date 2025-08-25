@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../context/authContext';
@@ -16,10 +17,9 @@ function SignUp() {
   const handleSignup = async () => {
     try {
       await signup(email, username, password);
-      // setUsername('');
-      // setEmail('');
-      // setPassword('');
-      navigate('/verify-email'); // Redirect to verify email page
+      toast.success('Signup successful!');
+      alert(" Email verification is suspended due to NOT having permanent domain,Email us at warhkcc@gmail.com to get verified");
+      navigate('/dashboard'); // Redirect to dashboard page
     } catch (error) {
       console.error('Signup error:', error);
       // Handle error (e.g., show a notification)

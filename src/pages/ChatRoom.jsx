@@ -53,7 +53,7 @@ function ChatRoom() {
         const formatted = data.map((msg) => ({
           _id: msg._id,
           text: msg.content,
-          sender: msg.sender?.username || 'Unknown',
+          userName: msg.sender?.username || 'Unknown', 
           timestamp: msg.timestamp,
           system: false,
           delivered: true,
@@ -156,6 +156,7 @@ function ChatRoom() {
   const sendMessage = (text) => {
     const msg = {
       sender: userId,
+      userName:name,
       text,
       timestamp: new Date().toISOString(),
       delivered: false,

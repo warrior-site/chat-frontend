@@ -4,24 +4,28 @@ import { useNavigate } from 'react-router-dom';
 
 const VerifyEmail = () => {
   const [code, setCode] = useState('');
-  const{isLoading,verifyEmail,error}= useAuthStore();
+  const { isLoading, verifyEmail, error } = useAuthStore();
   const navigate = useNavigate();
-  
+
   const handleClick = async (e) => {
     e.preventDefault();
     if (code.length !== 6) {
       alert('Please enter a valid 6-digit code');
       return;
     }
-    
+
     try {
       await verifyEmail(code);
+      toast.success('Email verified successfully!');
       navigate('/dashboard'); // Redirect to dashboard on success
     } catch (err) {
       console.error('Verification failed:', err);
     }
-  }
-  
+  };
+  const timer = setTimeout(() => {
+    toast.info('Verification code has been sent to your email via this domain: onboarding@resend.dev');
+  }, 5000);
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 p-4">
@@ -38,7 +42,7 @@ const VerifyEmail = () => {
         />
 
         <button
-        onClick={handleClick}
+          onClick={handleClick}
           disabled={isLoading}
           className="w-full py-3 mt-2 rounded-md text-black font-semibold bg-white bg-opacity-10 hover:bg-opacity-20 shadow-lg transition-all duration-200 border border-white relative
                      before:absolute before:inset-0 before:rounded-md before:shadow-[0_0_20px_2px_white] before:opacity-0 hover:before:opacity-100 before:transition-opacity"

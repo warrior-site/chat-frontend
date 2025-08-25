@@ -55,7 +55,7 @@ function HomePage() {
           <GroupsShown />
         </div>
 
-        {/* Enter Chat Button Only */}
+        {/* Enter Chat Button Only
         <Link to="/chat">
           <motion.button
             whileTap={{ scale: 0.95 }}
@@ -64,7 +64,7 @@ function HomePage() {
           >
             Enter Chat
           </motion.button>
-        </Link>
+        </Link> */}
       </main>
     </div>
   );

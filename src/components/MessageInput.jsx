@@ -7,7 +7,7 @@ import { useAuthStore } from '../context/authContext';
 function MessageInput({ onSend, toggleAI }) {
   const [text, setText] = useState('');
   const socket = useSocket();
-  const { user } = useAuthStore();
+  const { user } = useAuthStore(); 
   const typingTimeoutRef = useRef(null);
 
   const handleSend = () => {

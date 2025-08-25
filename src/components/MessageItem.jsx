@@ -12,7 +12,7 @@ function MessageItem({ message }) {
       {message.text} <span className="text-xs text-gray-500">{time}</span>
     </p>
   ) : (
-    <motion.div
+    <motion.div 
       className="bg-gray-800 text-white p-3 rounded-md shadow max-w-[80vw] sm:max-w-[60%] md:max-w-[50%]"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}

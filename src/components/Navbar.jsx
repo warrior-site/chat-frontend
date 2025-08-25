@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
-import { useUser } from '../context/UserContext';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuthStore } from '../context/authContext';
@@ -9,7 +8,7 @@ import { useAuthStore } from '../context/authContext';
 function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [friendRequests, setFriendRequests] = useState([]);
-  const [groupRequests, setGroupRequests] = useState([]); // ✅ added this
+  const [groupRequests, setGroupRequests] = useState([]);
   const dropdownRef = useRef(null);
   const { user } = useAuthStore();
 
@@ -19,7 +18,6 @@ function Navbar() {
         .then(res => setFriendRequests(res.data))
         .catch(err => toast.error('Failed to load friend requests'));
 
-      // ✅ Fetch group requests if user is an admin
       axios.post('https://chat-backend-knw6.onrender.com/api/user/get-group-requests', { user }, { withCredentials: true })
         .then(res => setGroupRequests(res.data))
         .catch(err => toast.error('Failed to load group requests'));
@@ -47,7 +45,7 @@ function Navbar() {
         { withCredentials: true }
       );
       toast.success("User added to group");
-      setGroupRequests(prev => prev.filter(r => r._id !== userId)); // ✅ update UI
+      setGroupRequests(prev => prev.filter(r => r._id !== userId));
     } catch (err) {
       toast.error(err.response?.data?.message || "Error accepting user");
     }
@@ -71,7 +69,8 @@ function Navbar() {
         <div className="flex gap-4 items-center">
           <button
             onClick={() => setDropdownOpen(prev => !prev)}
-            className="relative text-white bg-transparent border border-white px-4 py-2 rounded-md hover:bg-white hover:text-black transition"
+            className="relative text-white bg-transparent border border-white px-4 py-2 rounded-md hover:bg-white hover:text-black transition shadow-[0_0_10px_2px_white] hover:shadow-[0_0_15px_4px_white]"
+            style={{ boxShadow: '0 0 8px 2px rgba(255, 255, 255, 0.7)' }}
           >
             Inbox
             {friendRequests.length > 0 && (
@@ -110,7 +109,7 @@ function Navbar() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute right-6 top-16 w-72 bg-gray-800 border border-gray-600 rounded-md shadow-lg z-50"
+              className="absolute right-6 top-16 w-72 bg-gray-800/30 border border-gray-500 rounded-md shadow-lg z-50 backdrop-blur-md backdrop-saturate-150"
             >
               <div className="p-3">
                 <h2 className="text-white font-semibold text-sm mb-2">Friend Requests</h2>

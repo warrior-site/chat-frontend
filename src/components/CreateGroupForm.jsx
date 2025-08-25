@@ -52,7 +52,7 @@ function CreateGroupForm({ onClose }) {
   }
 
   try {
-    console.log('Submitting to:', 'https://chat-backend-knw6.onrender.com/api/user/create-group');
+    console.log('Submitting to:', 'http://localhost:5000/api/user/create-group');
 
     const res = await axios.post('https://chat-backend-knw6.onrender.com/api/user/create-group', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

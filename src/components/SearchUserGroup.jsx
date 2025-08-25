@@ -11,7 +11,7 @@ function SearcUserGroup() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const {user} =useAuthStore()
+  const { user } = useAuthStore()
 
   const fetchResults = debounce(async (q, type) => {
     if (!q.trim()) {
@@ -45,15 +45,15 @@ function SearcUserGroup() {
     try {
       if (searchType === 'user') {
         const res = await axios.post(
-          `https://chat-backend-knw6.onrender.com/api/user/send-friend-request`,
+          `http://localhost:5000/api/user/send-friend-request`,
           { targetUserId: itemId, user },
           { withCredentials: true }
         );
         toast.success(res.data.message || 'Friend request sent!');
       } else {
         const res = await axios.post(
-          `https://chat-backend-knw6.onrender.com/api/user/join-group`,
-          { groupId: itemId,user },
+          `http://localhost:5000/api/user/join-group`,
+          { groupId: itemId, user },
           { withCredentials: true }
         );
         toast.success(res.data.message || 'Group join request sent!');
@@ -76,12 +76,16 @@ function SearcUserGroup() {
           <option value="group">👥 Groups</option>
         </select>
 
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={`Search ${searchType}s...`}
-          className="flex-1 px-4 py-2 bg-slate-900 border border-slate-600 text-white rounded-md"
-        />
+        <div className="w-full flex justify-center px-2">
+          <div className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl px-2">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={`Search ${searchType}s...`}
+              className="flex-1 px-4 py-2 bg-slate-900 border border-slate-600 text-white rounded-md w-full"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Animated Dropdown */}

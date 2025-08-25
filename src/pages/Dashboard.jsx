@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user, isLoading, logout } = useAuthStore();
+  const { user, isLoading, logout, verifyEmail } = useAuthStore();
   const [profilePic, setProfilePic] = useState(user?.profilePicture || '');
   const [file, setFile] = useState(null);
   const [language, setLanguage] = useState(user?.preferredLanguage || '');
   const [purpose, setPurpose] = useState(user?.usageReason || '');
   const [game, setGame] = useState(user?.game || '');
   const [isSaving, setIsSaving] = useState(false);
+  const [code, setCode] = useState('');
   const navigate = useNavigate();
   const font = user?.font || '';
-   const textSize = user?.textSize || '';
+  const textSize = user?.textSize || '';
 
   const handleLogout = async () => {
     try {
@@ -57,8 +59,8 @@ const Dashboard = () => {
 
       const data = await res.json();
       if (res.ok) {
-        toast.success('✅ Preferences saved!');
-        alert("✅ Profile updated successfully!");
+        toast.success('✅ Preferences saved!, we are working on language conversion and adding features according to usage purpose.');
+        alert("Preferences saved!, we are working on language conversion and adding features according to usage purpose.");
         console.log("Response:", data);
       } else {
         throw new Error(data.message || "Update failed");
@@ -66,7 +68,7 @@ const Dashboard = () => {
     } catch (err) {
       console.error("Save error:", err);
       toast.error('❌ Failed to save preferences.');
-      
+
     } finally {
       setIsSaving(false);
     }
@@ -75,6 +77,24 @@ const Dashboard = () => {
   const fadeInVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
+  };
+  const codeHandle = async () => {
+    toast.info("Email us at warhkcc@gmail.com to get verified");
+  }
+  const verifyHandle = async (e) => {
+    e.preventDefault();
+    if (code.length !== 6) {
+      alert('Please enter a valid 6-digit code');
+      return;
+    }
+
+    try {
+      await verifyEmail(code);
+      toast.success('Email verified successfully!, Refresh and Relogin ');
+      navigate('/dashboard'); // Redirect to dashboard on success
+    } catch (err) {
+      console.error('Verification failed:', err);
+    }
   };
 
   return (
@@ -101,6 +121,7 @@ const Dashboard = () => {
             accept="image/*"
             onChange={handleImageUpload}
             className="text-sm text-gray-300"
+            style={{ backgroundColor: '#2b2c3b', borderRadius: '0.375rem', padding: '0.5rem', textAlign: "center" }}
           />
         </div>
 
@@ -112,7 +133,28 @@ const Dashboard = () => {
             value={user?.isVerified ? (
               <span className="text-green-400">Verified</span>
             ) : (
-              <span className="text-red-400">Unverified</span>
+              <>
+                <span className="text-red-400">Unverified</span>
+                <span className=" flex-row justify-between flex flex-wrap">
+                  <span >
+                    <span className='flex flex-row gap-x-2'>
+                      <input
+                        type="text"
+                        maxLength="6"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        className="w-full text-center  tracking-widest p-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Enter 6-digit code"
+                      />
+                      <button onClick={(e) => verifyHandle(e)}
+                        className="text-blue-400 underline">Verify</button>
+                    </span>
+                  </span>
+                  <button onClick={() => codeHandle()}
+                    className="text-blue-400 underline">Get Code</button>
+                </span>
+              </>
+
             )}
           />
           <InfoBox
