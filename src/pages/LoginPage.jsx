@@ -23,9 +23,9 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    alert("Google login coming soon!");
-  };
+  // const handleGoogleLogin = () => {
+  //   alert("Google login coming soon!");
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 px-4">
