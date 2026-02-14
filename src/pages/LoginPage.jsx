@@ -30,9 +30,7 @@ const LoginPage = () => {
 };
 
 
-  // const handleGoogleLogin = () => {
-  //   alert('Google login coming soon!');
-  // };
+ 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 px-4">
@@ -106,15 +104,7 @@ const LoginPage = () => {
           <hr className="absolute top-2 left-0 w-full border-gray-700 z-0" />
         </div>
 
-        {/* <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={handleGoogleLogin}
-          className="mt-6 w-full flex items-center justify-center py-2 bg-white text-gray-800 font-semibold rounded-md shadow-md hover:bg-gray-100 transition duration-300"
-        >
-          <FcGoogle className="text-xl mr-3" />
-          Login with Google
-        </motion.button> */}
+       
 
 
         <div className="text-center mt-6">
