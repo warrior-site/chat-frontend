@@ -14,9 +14,9 @@ const LoginPage = () => {
 
 
   const handleFormLogin = async (e) => {
-    e.preventDefault();
-    try {
-     try {
+  e.preventDefault();
+
+  try {
     await login(userId, password);
 
     toast.success("✅ Login successful");
@@ -24,13 +24,8 @@ const LoginPage = () => {
   } catch (err) {
     toast.error(err.message || "Login failed");
   }
-      
-      return;
-      
-    }
-    
-    
-  };
+};
+
 
   const handleGoogleLogin = () => {
     alert('Google login coming soon!');
