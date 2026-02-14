@@ -15,17 +15,16 @@ function SignUp() {
   const navigate = useNavigate();
 
   const handleSignup = async () => {
-    try {
-      await signup(email, username, password);
-      toast.success('Signup successful!');
-      alert(" Email verification is suspended due to NOT having permanent domain,Email us at warhkcc@gmail.com to get verified");
-      navigate('/dashboard'); // Redirect to dashboard page
-    } catch (error) {
-      console.error('Signup error:', error);
-      // Handle error (e.g., show a notification)
-      return;
+  try {
+    await signup(email, username, password);
 
-    }
+    toast.success("Signup successful!");
+    navigate("/dashboard");
+  } catch (err) {
+    toast.error(err.message || "Signup failed");
+  }
+};
+
 
 
   };
