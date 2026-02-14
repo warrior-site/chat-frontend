@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
-import { ToastContainer } from "react-toastify";
+import { ToastContainer , toast} from "react-toastify";
 import { Link,useNavigate  } from 'react-router-dom';
 import { useAuthStore } from '../context/authContext';
 
@@ -9,34 +9,30 @@ import { useAuthStore } from '../context/authContext';
 const LoginPage = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+
   const navigate = useNavigate();
   const{isLoading,login,error} = useAuthStore();
 
 
-  const handleFormLogin = async (e) => {
-    e.preventDefault();
-    try {
-      await login(userId, password);
-      if (!isLoading) {
-        navigate('/dashboard');
-        toast.success('✅ Login Done!');
-      } else {
-        alert('Logging in, please wait...');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error('❌ Login Failed .');
-      
-      return;
-      
-    }
-    
-    
-  };
+ const handleFormLogin = async (e) => {
+  e.preventDefault();
 
-  const handleGoogleLogin = () => {
-    alert('Google login coming soon!');
-  };
+  try {
+    await login(userId, password);
+    toast.success("Login successful");
+    navigate("/dashboard");
+  } catch (err) {
+    setError(true);
+    setTimeout(() => setError(false), 500); // shake animation
+    toast.error(err.message || "Login failed");
+  }
+};
+
+
+  // const handleGoogleLogin = () => {
+  //   alert('Google login coming soon!');
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 px-4">
@@ -74,13 +70,34 @@ const LoginPage = () => {
           </div>
           
           
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            type="submit"
-            className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md transition duration-300"
-          >
-            Login
-          </motion.button>
+         <motion.button
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.96 }}
+  animate={
+    error
+      ? { x: [-6, 6, -4, 4, 0] }   // shake on error
+      : {}
+  }
+  transition={{ duration: 0.3 }}
+  type="submit"
+  disabled={isLoading}
+  className={`w-full py-2 rounded-md font-semibold transition-all duration-300 flex items-center justify-center gap-2
+  ${
+    isLoading
+      ? "bg-purple-500 opacity-80 cursor-not-allowed"
+      : "bg-purple-600 hover:bg-purple-700 hover:shadow-lg hover:shadow-purple-500/30"
+  } text-white`}
+>
+  {isLoading ? (
+    <>
+      <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+      Logging in...
+    </>
+  ) : (
+    "Login"
+  )}
+</motion.button>
+
          
         </form>
 
@@ -89,7 +106,7 @@ const LoginPage = () => {
           <hr className="absolute top-2 left-0 w-full border-gray-700 z-0" />
         </div>
 
-        <motion.button
+        {/* <motion.button
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.96 }}
           onClick={handleGoogleLogin}
@@ -97,7 +114,7 @@ const LoginPage = () => {
         >
           <FcGoogle className="text-xl mr-3" />
           Login with Google
-        </motion.button>
+        </motion.button> */}
 
 
         <div className="text-center mt-6">
