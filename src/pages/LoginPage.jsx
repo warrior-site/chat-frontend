@@ -16,16 +16,14 @@ const LoginPage = () => {
   const handleFormLogin = async (e) => {
     e.preventDefault();
     try {
-      await login(userId, password);
-      if (!isLoading) {
-        navigate('/dashboard');
-        toast.success('✅ Login Done!');
-      } else {
-        alert('Logging in, please wait...');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error('❌ Login Failed .');
+     try {
+    await login(userId, password);
+
+    toast.success("✅ Login successful");
+    navigate("/dashboard");
+  } catch (err) {
+    toast.error(err.message || "Login failed");
+  }
       
       return;
       
