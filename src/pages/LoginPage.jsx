@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
 import { ToastContainer } from "react-toastify";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link,useNavigate  } from 'react-router-dom';
 import { useAuthStore } from '../context/authContext';
 
 
@@ -10,20 +10,28 @@ const LoginPage = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { isLoading, login, error } = useAuthStore();
+  const{isLoading,login,error} = useAuthStore();
 
 
   const handleFormLogin = async (e) => {
     e.preventDefault();
-
     try {
       await login(userId, password);
-
-      toast.success("✅ Login successful");
-      navigate("/dashboard");
-    } catch (err) {
-      toast.error(err.message || "Login failed");
+      if (!isLoading) {
+        navigate('/dashboard');
+        toast.success('✅ Login Done!');
+      } else {
+        alert('Logging in, please wait...');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('❌ Login Failed .');
+      
+      return;
+      
     }
+    
+    
   };
 
   const handleGoogleLogin = () => {
@@ -64,8 +72,8 @@ const LoginPage = () => {
               placeholder="Enter your password"
             />
           </div>
-
-
+          
+          
           <motion.button
             whileTap={{ scale: 0.97 }}
             type="submit"
@@ -73,7 +81,7 @@ const LoginPage = () => {
           >
             Login
           </motion.button>
-
+         
         </form>
 
         <div className="mt-6 relative text-center text-gray-400">
@@ -93,16 +101,16 @@ const LoginPage = () => {
 
 
         <div className="text-center mt-6">
-          <p className="text-white text-lg font-semibold">
-            Dont  have an account?{' '}
-            <Link
-              to="/signup"
-              className="underline text-white glow-text"
-            >
-              Signup
-            </Link>
-          </p>
-        </div>
+      <p className="text-white text-lg font-semibold">
+        Dont  have an account?{' '}
+        <Link
+          to="/signup"
+          className="underline text-white glow-text"
+        >
+         Signup
+        </Link>
+      </p>
+    </div>
       </motion.div>
     </div>
   );
