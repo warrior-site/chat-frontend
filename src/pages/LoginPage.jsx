@@ -74,13 +74,22 @@ const LoginPage = () => {
           </div>
           
           
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            type="submit"
-            className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md transition duration-300"
-          >
-            Login
-          </motion.button>
+         <motion.button
+  whileTap={{ scale: 0.97 }}
+  type="submit"
+  disabled={isLoading}
+  className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md transition duration-300 flex items-center justify-center"
+>
+  {isLoading ? (
+    <>
+      <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+      Logging in...
+    </>
+  ) : (
+    "Login"
+  )}
+</motion.button>
+
          
         </form>
 
