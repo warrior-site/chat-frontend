@@ -33,15 +33,34 @@ export const useAuthStore = create((set) => ({
         }
     },
     login: async (email, password) => {
-        try {
-            set({ isLoading: true, error: null });
-            const response = await axios.post(`${API_URL}/login`, { email, password });
-            set({ user: response.data.user, isAuthenticated: true, isLoading: false, message: response.data.message });
-            console.log('Login successful:', response.data);
-        } catch (error) {
-            set({ error: error.response?.data?.message || 'Login failed', isLoading: false });
-        }
-    },
+  try {
+    set({ isLoading: true, error: null });
+
+    const response = await axios.post(`${API_URL}/login`, {
+      email,
+      password,
+    });
+
+    set({
+      user: response.data.user,
+      isAuthenticated: true,
+      isLoading: false,
+      message: response.data.message,
+    });
+
+    return response.data; // success
+  } catch (error) {
+    const msg =
+      error.response?.data?.message ||
+      error.message ||
+      "Server error. Try again.";
+
+    set({ error: msg, isLoading: false });
+
+    throw new Error(msg); // 🔥 VERY IMPORTANT
+  }
+},
+
     logout: async () => {
         try {
             set({ isLoading: true, error: null });
