@@ -12,16 +12,36 @@ export const useAuthStore = create((set) => ({
     isLoading: false,
     isCheckingAuth: true,
     message: null,
-    signup: async (email, username, password) => {
-        try {
-            set({ isLoading: true, error: null });
-            const response = await axios.post(`${API_URL}/signup`, { email, username, password });
-            set({ user: response.data.newUser, isAuthenticated: true, isLoading: false, message: response.data.message });
-            console.log('Signup successful:', response.data);
-        } catch (error) {
-            set({ error: error.response?.data?.message || 'Signup failed', isLoading: false });
-        }
-    },
+   signup: async (email, username, password) => {
+  try {
+    set({ isLoading: true, error: null });
+
+    const response = await axios.post(`${API_URL}/signup`, {
+      email,
+      username,
+      password,
+    });
+
+    set({
+      user: response.data.newUser,
+      isAuthenticated: true,
+      isLoading: false,
+      message: response.data.message,
+    });
+
+    return response.data; 
+  } catch (error) {
+    const msg =
+      error.response?.data?.message ||
+      error.message ||
+      "Signup failed. Try again.";
+
+    set({ error: msg, isLoading: false });
+
+    throw new Error(msg); 
+  }
+},
+
     verifyEmail: async (code) => {
         try {
             set({ isLoading: true, error: null });
@@ -48,7 +68,7 @@ export const useAuthStore = create((set) => ({
       message: response.data.message,
     });
 
-    return response.data; // success
+    return response.data; 
   } catch (error) {
     const msg =
       error.response?.data?.message ||
@@ -57,7 +77,7 @@ export const useAuthStore = create((set) => ({
 
     set({ error: msg, isLoading: false });
 
-    throw new Error(msg); // 🔥 VERY IMPORTANT
+    throw new Error(msg); 
   }
 },
 
