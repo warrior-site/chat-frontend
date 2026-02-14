@@ -12,7 +12,7 @@ const LoginPage = () => {
   const [error, setError] = useState(false);
 
   const navigate = useNavigate();
-  const{isLoading,login,error} = useAuthStore();
+  const{isLoading,login} = useAuthStore();
 
 
  const handleFormLogin = async (e) => {
