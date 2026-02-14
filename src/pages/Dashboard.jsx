@@ -60,7 +60,7 @@ const Dashboard = () => {
       const data = await res.json();
       if (res.ok) {
         toast.success('✅ Preferences saved!, we are working on language conversion and adding features according to usage purpose.');
-        alert("Preferences saved!, we are working on language conversion and adding features according to usage purpose.");
+        
         console.log("Response:", data);
       } else {
         throw new Error(data.message || "Update failed");
